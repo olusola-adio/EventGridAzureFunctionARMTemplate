@@ -9,7 +9,7 @@
             "value": "eventGridSubscriptionName"
         },
         "location": {
-            "value": "location"
+            "value": "northeurope"
         },
         "appName": {
             "value": "appName"
