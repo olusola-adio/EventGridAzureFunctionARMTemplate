@@ -18,7 +18,7 @@
             "value": "functionName"
         },
         "storageAccountType": {
-            "value": "storageAccountType"
+            "value": "Standard_LRS"
         },
         "runtime": {
             "value": "runtime"
