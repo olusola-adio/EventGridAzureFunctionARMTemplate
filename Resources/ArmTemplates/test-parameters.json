@@ -21,7 +21,7 @@
             "value": "Standard_LRS"
         },
         "runtime": {
-            "value": "runtime"
+            "value": "dotnet"
         }
     }
 }
