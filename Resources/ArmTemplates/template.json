@@ -57,12 +57,13 @@
     },
     "variables": {
         "functionUrl": "[concat('https://', variables('FunctionAppName'),'.azurewebsites.net/runtime/webhooks/eventgrid?functionName=', parameters('FunctionName'),'&code=')]",
-        "functionAppName": "[parameters('appName')]",
-        "hostingPlanName": "[parameters('appName')]",
-        "applicationInsightsName": "[parameters('appName')]",
+        "functionAppName": "[concat(parameters('appName'),'-fa')]",
+        "hostingPlanName": "[concat(parameters('appName'),'-asp')]",
+        "applicationInsightsName": "[concat(parameters('appName'),'-ai')]",
         "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'azfunction')]",
         "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
-        "functionWorkerRuntime": "[parameters('runtime')]"
+        "functionWorkerRuntime": "[parameters('runtime')]",
+        "dfcDevOpsTemplatesUrl": "https://raw.githubusercontent.com/olusola-adio/dfc-devops/master/ArmTemplates/"
     },
     "resources": [
         {
@@ -129,7 +130,8 @@
             "kind": "functionapp",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "[resourceId('microsoft.insights/components/', variables('applicationInsightsName'))]"
             ],
             "properties": {
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
@@ -176,19 +178,25 @@
             }
         },
         {
-            "apiVersion": "2018-05-01-preview",
+            "apiVersion": "2017-05-10",
             "name": "[variables('applicationInsightsName')]",
-            "type": "microsoft.insights/components",
-            "location": "East US",
-            "tags": {
-                "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', variables('applicationInsightsName'))]": "Resource"
-            },
+            "type": "Microsoft.Resources/deployments",
             "properties": {
-                "ApplicationId": "[variables('applicationInsightsName')]",
-                "Request_Source": "IbizaWebAppExtensionCreate"
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('dfcDevOpsTemplatesUrl'), 'application-insights.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appInsightsName": {
+                        "value": "[variables('applicationInsightsName')]"
+                    },
+                    "attachedService": {
+                        "value": ""
+                    }
+                }
             }
         }
-
     ],
     "outputs": {
         "return": {
