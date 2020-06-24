@@ -1,0 +1,27 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "eventGridTopicName": {
+            "value": "__eventGridTopicName__"
+        },
+        "eventGridSubscriptionName": {
+            "value": "__eventGridSubscriptionName__"
+        },
+        "location": {
+            "value": "__location__"
+        },
+        "appName": {
+            "value": "__appName__"
+        },
+        "functionName": {
+            "value": "__functionName__"
+        },
+        "storageAccountType": {
+            "value": "__storageAccountType__"
+        },
+        "runtime": {
+            "value": "__runtime__"
+        }
+    }
+}

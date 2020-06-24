@@ -1,0 +1,29 @@
+variables:
+    ArmTemplateRoot: '$(Build.SourcesDirectory)\Resources\ArmTemplates'     
+    SolutionBaseName: 'EventGridAzureFunctions'
+    BuildPlatform: 'any cpu'
+    BuildConfiguration: 'release'
+
+resources:
+  repositories:
+  - repository: self
+  - repository: dfc-devops
+    type: github
+    name: olusola-adio/dfc-devops
+    ref: refs/tags/v1.11.1
+    endpoint: 'olusola-adio'
+
+pool:
+  vmImage: windows-latest
+    
+
+jobs:
+
+#Build and test resources
+- job: BuildArmTemplates
+  steps:
+  - template: AzureDevOpsTemplates/Build/StepTemplates/dfc-arm-build.yml@dfc-devops
+    parameters:
+      ArmTemplateRoot: $(ArmTemplateRoot)
+      SolutionBaseName: $(SolutionBaseName)
+
