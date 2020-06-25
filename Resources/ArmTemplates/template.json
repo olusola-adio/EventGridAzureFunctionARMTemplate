@@ -52,14 +52,21 @@
             "metadata": {
                 "description": "The language worker runtime to load in the function app."
             }
+        },
+        "containerNamefilter": {
+            "type": "string",
+            "defaultValue": "test",
+            "metadata": {
+                "description": "Container name filter"
+            }
         }
 
     },
     "variables": {
-        "functionUrl"   : "[concat('https://', variables('FunctionAppName'),'.azurewebsites.net/runtime/webhooks/eventgrid?functionName=', parameters('FunctionName'),'&code=')]",
-        "functionId" :"[resourceId(resourceGroup().name,'Microsoft.Web/sites/functions/', parameters('appName'), parameters('functionName'))]",
+        // "functionUrl"   : "[concat('https://', variables('FunctionAppName'),'.azurewebsites.net/runtime/webhooks/eventgrid?functionName=', parameters('FunctionName'),'&code=')]",
         "functionAppName": "[concat(parameters('appName'),'-fa')]",
         "hostingPlanName": "[concat(parameters('appName'),'-asp')]",
+        "functionId" :"[resourceId(resourceGroup().name,'Microsoft.Web/sites/functions/', variables('functionAppName'), parameters('functionName'))]",
         "applicationInsightsName": "[concat(parameters('appName'),'-ai')]",
         "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'azfunction')]",
         "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
@@ -90,8 +97,19 @@
                     }
                 },
                 "filter": {
+                    "subjectBeginsWith": "",
+                    "subjectEndsWith": "",
+                    "isSubjectCaseSensitive": false,
                     "includedEventTypes": [
-                        ""
+                        "Microsoft.Storage.BlobCreated",
+                        "Microsoft.Storage.BlobDeleted"
+                    ],
+                    "advancedFilters": [
+                        {
+                            "key": "subject",
+                            "operatorType": "StringContains",
+                            "value": "[parameters('containerNamefilter')]"
+                        }
                     ]
                 }
             },
