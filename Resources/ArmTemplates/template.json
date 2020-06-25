@@ -57,6 +57,7 @@
     },
     "variables": {
         "functionUrl"   : "[concat('https://', variables('FunctionAppName'),'.azurewebsites.net/runtime/webhooks/eventgrid?functionName=', parameters('FunctionName'),'&code=')]",
+        "functionId" :"[resourceId(resourceGroup().name,'Microsoft.Web/sites/functions/', parameters('appName'), parameters('functionName'))]",
         "functionAppName": "[concat(parameters('appName'),'-fa')]",
         "hostingPlanName": "[concat(parameters('appName'),'-asp')]",
         "applicationInsightsName": "[concat(parameters('appName'),'-ai')]",
@@ -85,7 +86,7 @@
                 "destination": {
                     "endpointType": "AzureFunction",
                     "properties": {
-                        "resourceId": "[resourceId('Microsoft.Web/sites/functions/', variables('functionAppName'), parameters('functionName'))]"                   
+                        "resourceId": "[variables('functionId')]"                   
                     }
                 },
                 "filter": {
