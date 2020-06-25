@@ -16,12 +16,6 @@
         },
         "functionName": {
             "value": "__functionName__"
-        },
-        "storageAccountType": {
-            "value": "__storageAccountType__"
-        },
-        "runtime": {
-            "value": "__runtime__"
         }
     }
 }

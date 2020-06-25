@@ -44,7 +44,6 @@
                 "description": "Container name filter"
             }
         }
-
     },
     "variables": {
         "functionAppName": "[concat(parameters('appName'),'-fa')]",

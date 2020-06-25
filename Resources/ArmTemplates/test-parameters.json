@@ -16,12 +16,6 @@
         },
         "functionName": {
             "value": "functionName"
-        },
-        "storageAccountType": {
-            "value": "Standard_LRS"
-        },
-        "runtime": {
-            "value": "dotnet"
         }
     }
 }
