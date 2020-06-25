@@ -47,7 +47,7 @@
         },
         "runtime": {
             "type": "string",
-            "defaultValue": "powershell",
+            "defaultValue": "dotnet",
             "allowedValues": [ "node", "dotnet", "java", "powershell" ],
             "metadata": {
                 "description": "The language worker runtime to load in the function app."
@@ -66,7 +66,7 @@
         // "functionUrl"   : "[concat('https://', variables('FunctionAppName'),'.azurewebsites.net/runtime/webhooks/eventgrid?functionName=', parameters('FunctionName'),'&code=')]",
         "functionAppName": "[concat(parameters('appName'),'-fa')]",
         "hostingPlanName": "[concat(parameters('appName'),'-asp')]",
-        "functionId" :"[resourceId(resourceGroup().name,'Microsoft.Web/sites/functions/', variables('functionAppName'), parameters('functionName'))]",
+        "functionId" :"[resourceId('Microsoft.Web/sites/functions/', variables('functionAppName'), parameters('functionName'))]",
         "applicationInsightsName": "[concat(parameters('appName'),'-ai')]",
         "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'azfunction')]",
         "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
