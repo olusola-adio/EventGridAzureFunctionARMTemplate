@@ -180,7 +180,6 @@
             "apiVersion": "2017-05-10",
             "name": "[variables('applicationInsightsName')]",
             "type": "Microsoft.Resources/deployments",
-            "location": "[parameters('location')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
