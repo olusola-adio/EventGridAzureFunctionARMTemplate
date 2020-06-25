@@ -188,10 +188,6 @@
                             "name": "FUNCTIONS_WORKER_RUNTIME",
                             "value": "[variables('functionWorkerRuntime')]"
                         }
-                        ,{
-                            "name": "WEBSITE_RUN_FROM_PACKAGE",
-                            "value": "https://dwpdevsharedstr.blob.core.windows.net/package/dwp-dev-myfunction-fa.zip"
-                        }
                     ]
                 }
             }
