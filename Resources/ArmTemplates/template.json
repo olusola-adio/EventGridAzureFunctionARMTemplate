@@ -78,13 +78,6 @@
             "name": "[parameters('eventGridTopicName')]",
             "type": "Microsoft.EventGrid/topics",
             "location": "[parameters('location')]",
-             "sku": {
-                "name": "Basic"
-            },
-            "properties": {
-                "inputSchema": "EventGridSchema",
-                "publicNetworkAccess": "Enabled"
-            },
             "apiVersion": "2018-01-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
