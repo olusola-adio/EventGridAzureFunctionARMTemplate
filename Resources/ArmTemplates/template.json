@@ -75,18 +75,6 @@
                 "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
 
             ]
-        },
-        {
-            "name": "default/eventgrid_extension",
-            "apiVersion": "2018-11-01",
-            "type": "host/systemkeys",
-            "properties": {
-                    "name": "eventgrid_extension",
-                            "value": "12345"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
-            ]
         }, 
         {
             "name": "[concat(parameters('eventGridTopicName'), '/Microsoft.EventGrid/', parameters('eventGridSubscriptionName'))]",
@@ -106,9 +94,8 @@
                 }
             },
             "dependsOn": [
-                "[parameters('eventGridTopicName')]",
-                "[resourceId('Microsoft.Web/sites/host/systemkeys', variables('functionAppName'),'default','eventgrid_extension')]"
-            ]
+                "[parameters('eventGridTopicName')]"
+             ]
         },
         {
             "type": "Microsoft.Storage/storageAccounts",
@@ -193,6 +180,7 @@
             "apiVersion": "2017-05-10",
             "name": "[variables('applicationInsightsName')]",
             "type": "Microsoft.Resources/deployments",
+            "location": "[parameters('location')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -213,7 +201,7 @@
     "outputs": {
         "return": {
             "type": "string",
-            "value": "[concat(variables('functionUrl'), listKeys(resourceId('Microsoft.Web/sites/host/', variables('functionAppName'), 'default'),'2016-08-01').systemkeys.eventgrid_extension)]"
+            "value": "[resourceId('Microsoft.Web/sites/functions/', variables('functionAppName'), parameters('functionName'))]"
         }
     }
 }
