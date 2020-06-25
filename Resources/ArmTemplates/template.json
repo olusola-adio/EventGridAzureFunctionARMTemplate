@@ -37,22 +37,6 @@
                 "description": "Function App Name"
             }
         },
-        "storageAccountType": {
-            "type": "string",
-            "defaultValue": "Standard_LRS",
-            "allowedValues": [ "Standard_LRS", "Standard_GRS", "Standard_RAGRS" ],
-            "metadata": {
-                "description": "Storage Account type"
-            }
-        },
-        "runtime": {
-            "type": "string",
-            "defaultValue": "dotnet",
-            "allowedValues": [ "node", "dotnet", "java", "powershell" ],
-            "metadata": {
-                "description": "The language worker runtime to load in the function app."
-            }
-        },
         "containerNamefilter": {
             "type": "string",
             "defaultValue": "test",
@@ -63,15 +47,8 @@
 
     },
     "variables": {
-        // "functionUrl"   : "[concat('https://', variables('FunctionAppName'),'.azurewebsites.net/runtime/webhooks/eventgrid?functionName=', parameters('FunctionName'),'&code=')]",
         "functionAppName": "[concat(parameters('appName'),'-fa')]",
-        "hostingPlanName": "[concat(parameters('appName'),'-asp')]",
-        "functionId" :"[resourceId('Microsoft.Web/sites/functions/', variables('functionAppName'), parameters('functionName'))]",
-        "applicationInsightsName": "[concat(parameters('appName'),'-ai')]",
-        "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'azfunction')]",
-        "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
-        "functionWorkerRuntime": "[parameters('runtime')]",
-        "dfcDevOpsTemplatesUrl": "https://raw.githubusercontent.com/olusola-adio/dfc-devops/master/ArmTemplates/"
+        "functionId" :"[resourceId('Microsoft.Web/sites/functions/', variables('functionAppName'), parameters('functionName'))]"
     },
     "resources": [
         {
@@ -80,8 +57,6 @@
             "location": "[parameters('location')]",
             "apiVersion": "2018-01-01",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
-
             ]
         }, 
         {
@@ -116,107 +91,6 @@
             "dependsOn": [
                 "[parameters('eventGridTopicName')]"
              ]
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts",
-            "name": "[variables('storageAccountName')]",
-            "apiVersion": "2016-12-01",
-            "location": "[parameters('location')]",
-            "kind": "Storage",
-            "sku": {
-                "name": "[parameters('storageAccountType')]"
-            }
-        },
-        {
-            "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2018-02-01",
-            "name": "[variables('hostingPlanName')]",
-            "location": "[parameters('location')]",
-            "sku": {
-                "name": "Y1",
-                "tier": "Dynamic"
-            },
-            "properties": {
-                "name": "[variables('hostingPlanName')]",
-                "computeMode": "Dynamic"
-            }
-        },
-        {
-            "apiVersion": "2015-08-01",
-            "type": "Microsoft.Web/sites",
-            "name": "[variables('functionAppName')]",
-            "location": "[parameters('location')]",
-            "kind": "functionapp",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[variables('applicationInsightsName')]"
-            ],
-            "properties": {
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
-                "siteConfig": {
-                    "appSettings": [
-                        {
-                            "name": "AzureWebJobsDashboard",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
-                        },
-                        {
-                            "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
-                        },
-                        {
-                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
-                        },
-                        {
-                            "name": "WEBSITE_CONTENTSHARE",
-                            "value": "[toLower(variables('functionAppName'))]"
-                        },
-                        {
-                            "name": "FUNCTIONS_EXTENSION_VERSION",
-                            "value": "~3"
-                        },
-                        {
-                            "name": "WEBSITE_NODE_DEFAULT_VERSION",
-                            "value": "8.11.1"
-                        },
-                        {
-                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                            "value": "[reference(variables('applicationInsightsName')).outputs.InstrumentationKey.value]"
-                        },
-                        {
-                            "name": "FUNCTIONS_WORKER_RUNTIME",
-                            "value": "[variables('functionWorkerRuntime')]"
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "apiVersion": "2017-05-10",
-            "name": "[variables('applicationInsightsName')]",
-            "type": "Microsoft.Resources/deployments",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(variables('dfcDevOpsTemplatesUrl'), 'application-insights.json')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "appInsightsName": {
-                        "value": "[variables('applicationInsightsName')]"
-                    },
-                    "attachedService": {
-                        "value": ""
-                    }
-                }
-            }
         }
-    ],
-    "outputs": {
-        "return": {
-            "type": "string",
-            "value": "[resourceId('Microsoft.Web/sites/functions/', variables('functionAppName'), parameters('functionName'))]"
-        }
-    }
+    ]
 }
