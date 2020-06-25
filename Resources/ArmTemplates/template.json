@@ -163,7 +163,7 @@
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                            "value": "[reference(resourceId('microsoft.insights/components/', variables('applicationInsightsName')), '2015-05-01').InstrumentationKey]"
+                            "value": "[reference(variables('applicationInsightsName')).outputs.InstrumentationKey.value]"
                         },
                         {
                             "name": "FUNCTIONS_WORKER_RUNTIME",
